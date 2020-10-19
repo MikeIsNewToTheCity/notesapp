@@ -1,9 +1,8 @@
-import React { useEffect, useReducer } from 'react';
+import React, { useEffect, useReducer } from 'react';
 import logo from './logo.svg';
 import './App.css';
 
 import { API } from 'aws-amplify';
-import { useEffect, useReducer } from 'react';
 import { List } from 'antd';
 import 'antd/dist/antd.css';
 import { listNotes } from './graphql/queries';
@@ -95,7 +94,7 @@ function App() {
 
   return (
     <div
-      style={Styles.container}
+      style={styles.container}
     >
       <List
         loading={state.loading}
