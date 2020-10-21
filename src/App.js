@@ -7,8 +7,7 @@ import { List } from 'antd';
 import 'antd/dist/antd.css';
 import { listNotes } from './graphql/queries';
 
-
-function App() {
+const App = () => {
 
   const initialState = {
     notes: []
