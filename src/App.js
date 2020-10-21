@@ -3,11 +3,17 @@ import logo from './logo.svg';
 import './App.css';
 
 import { API } from 'aws-amplify';
-import { List } from 'antd';
+import { List, Input, Button } from 'antd';
 import 'antd/dist/antd.css';
 import { listNotes } from './graphql/queries';
 
+import { v4 as uuid } from 'uuid';
+import { createNote as CreateNote } from './graphql/mutations';
+
 const App = () => {
+
+  const CLIENT_ID = uuid();
+  console.loading(CLIENT_ID);
 
   const initialState = {
     notes: []
@@ -22,18 +28,45 @@ const App = () => {
   const reducer = (state, action) => {
 
     switch(action.type) {
+
       case 'SET_NOTES':
         return {
           ...state
           , notes: action.notes
           , loading: false
-        }
+        };
+
       case 'ERROR':
         return {
           ...state
           , laoding: false
           , error: true
         };
+
+      case 'ADD_NOTE':
+        return {
+          ...state
+          , notes: [
+              action.note
+              , ...state.notes
+            ]
+        };
+
+      case 'RESET_FORM':
+        return {
+          ...state
+          , form: initialState.form
+        };
+
+      case 'SET_INPUT':
+        return {
+          ...state
+          , form: {
+              ...state.form
+              , [action.name]: action.value
+          }
+        }
+
       default:
         return { 
           ...state 
@@ -61,6 +94,42 @@ const App = () => {
         type: 'ERROR'
       })
     }
+  }
+
+  const createNote = async () => {
+    const { form } = state
+    if (!form.name || !form.description) {
+      return alert('please enter a name and description');
+    }
+
+    const note = { 
+      ...form  // spreads in name and description
+      , clientId: CLIENT_ID
+      , completed: false
+      , id: uuid()
+    }
+
+    dispatch({ 
+      type: 'ADD_NOTE'
+      , note 
+    });
+
+    dispatch({
+      type: 'RESET_FORM'
+    });
+
+    try {
+      await API.graphql({
+        query: CreateNote
+        , variables: { input: note }
+      });
+      console.log('successfully created note!');
+    }
+
+    catch (err) {
+      console.log("error: ", err);
+    }
+
   }
 
   useEffect(
