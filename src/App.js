@@ -11,6 +11,7 @@ import { v4 as uuid } from 'uuid';
 import { 
   createNote as CreateNote
   , deleteNote as DeleteNote
+  , updateNote as UpdateNote
 } from './graphql/mutations';
 
 const App = () => {
@@ -171,6 +172,35 @@ const App = () => {
     }
   }
 
+  const updateNote = async (note) => {
+
+    dispatch({ 
+      type: 'SET_NOTES'
+      , notes: state.notes.map(x => ({
+        ...x
+        , completed: x == note ? !x.completed : x.completed
+      }))
+    });
+
+    try {
+      await API.graphql({
+        query: UpdateNote
+        , variables: { 
+            input: { 
+              id: note.id
+              , completed: !note.completed 
+            } 
+          }
+      });
+
+      console.log('note successfully updated!')
+    } 
+    
+    catch (err) {
+      console.log('error: ', err);
+    }
+  }
+
   useEffect(
     () => {
       fetchNotes();
@@ -195,6 +225,12 @@ const App = () => {
             onClick={() => deleteNote(item)}>
                 Delete
           </p>
+          , <p 
+              style={styles.p}
+              onClick={() => updateNote(item)}
+            >
+              {item.completed ? 'Completed' : 'Mark Completed'}
+        </p>
         ]}
       >
       <List.Item.Meta
