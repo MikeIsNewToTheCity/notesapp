@@ -13,7 +13,7 @@ import { createNote as CreateNote } from './graphql/mutations';
 const App = () => {
 
   const CLIENT_ID = uuid();
-  console.loading(CLIENT_ID);
+  console.log(CLIENT_ID);
 
   const initialState = {
     notes: []
@@ -104,7 +104,7 @@ const App = () => {
 
     const note = { 
       ...form  // spreads in name and description
-      , clientId: CLIENT_ID
+      , clieantID: CLIENT_ID  // Was mispelled in model
       , completed: false
       , id: uuid()
     }
@@ -130,6 +130,14 @@ const App = () => {
       console.log("error: ", err);
     }
 
+  }
+
+  const onChange = (e) => {
+    dispatch({
+      type: 'SET_INPUT'
+      , name: e.target.name
+      , value: e.target.value
+    });
   }
 
   useEffect(
@@ -164,6 +172,26 @@ const App = () => {
     <div
       style={styles.container}
     >
+      <Input 
+        placeholder='Note Name'
+        style={styles.input}
+        name='name'
+        onChange={onChange}
+        value={state.form.name}
+      />
+      <Input 
+        placeholder='Note Description'
+        style={styles.input}
+        name='description'
+        onChange={onChange}
+        value={state.form.description}
+      />
+      <Button
+        type='primary'
+        onClick={createNote}
+      >
+        Create New note
+      </Button>
       <List
         loading={state.loading}
         dataSource={state.notes}
