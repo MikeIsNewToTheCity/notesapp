@@ -1,6 +1,6 @@
 type Note @model {
   id: ID!
-  clieantID: ID
+  clientId: ID
   name: String!
   description: String
   completed: Boolean

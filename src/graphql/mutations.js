@@ -8,7 +8,7 @@ export const createNote = /* GraphQL */ `
   ) {
     createNote(input: $input, condition: $condition) {
       id
-      clieantID
+      clientId
       name
       description
       completed
@@ -24,7 +24,7 @@ export const updateNote = /* GraphQL */ `
   ) {
     updateNote(input: $input, condition: $condition) {
       id
-      clieantID
+      clientId
       name
       description
       completed
@@ -40,7 +40,7 @@ export const deleteNote = /* GraphQL */ `
   ) {
     deleteNote(input: $input, condition: $condition) {
       id
-      clieantID
+      clientId
       name
       description
       completed

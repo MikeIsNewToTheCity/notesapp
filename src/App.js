@@ -108,7 +108,7 @@ const App = () => {
 
     const note = { 
       ...form  // spreads in name and description
-      , clieantID: CLIENT_ID  // Was mispelled in model
+      , clientId: CLIENT_ID  // Was mispelled in model
       , completed: false
       , id: uuid()
     }
@@ -178,7 +178,7 @@ const App = () => {
       type: 'SET_NOTES'
       , notes: state.notes.map(x => ({
         ...x
-        , completed: x == note ? !x.completed : x.completed
+        , completed: x === note ? !x.completed : x.completed
       }))
     });
 
